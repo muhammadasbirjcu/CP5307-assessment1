@@ -1,8 +1,7 @@
 package com.asbir.cp5307.currencyconverter.Responses;
 
-import com.asbir.cp5307.currencyconverter.Core.CurrencyPair;
+import com.asbir.cp5307.currencyconverter.Data.Entities.CurrencyPair;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,5 +31,17 @@ public class LatestRatesResponse extends BaseResponse implements JSONObjectParsa
             } catch (JSONException e) {
             }
         }
+    }
+
+    public String getBase() {
+        return base;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public HashMap<String, CurrencyPair> getRates() {
+        return rates;
     }
 }
