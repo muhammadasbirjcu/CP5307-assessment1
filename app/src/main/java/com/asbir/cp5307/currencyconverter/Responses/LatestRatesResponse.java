@@ -1,5 +1,7 @@
 package com.asbir.cp5307.currencyconverter.Responses;
 
+import com.asbir.cp5307.currencyconverter.Core.CurrencyPair;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,7 +12,7 @@ import java.util.Iterator;
 public class LatestRatesResponse extends BaseResponse implements JSONObjectParsable {
     protected String base;
     protected String date;
-    protected HashMap<String, Double> rates;
+    protected HashMap<String, CurrencyPair> rates;
 
     @Override
     public void parse(JSONObject jsonObj)  throws JSONException {
@@ -26,9 +28,8 @@ public class LatestRatesResponse extends BaseResponse implements JSONObjectParsa
         while (iterator.hasNext()) {
             String key = iterator.next();
             try {
-                rates.put(key, ratesJson.getDouble(key));
+                rates.put(key, new CurrencyPair(base, key, ratesJson.getDouble(key), timestamp));
             } catch (JSONException e) {
-                // Something went wrong!
             }
         }
     }
