@@ -11,8 +11,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import com.asbir.cp5307.currencyconverter.Services.Symbols;
-
 import java.util.ArrayList;
 
 /**
@@ -20,7 +18,7 @@ import java.util.ArrayList;
  * Use the {@link SymbolSelector#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SymbolSelector extends Fragment {
+public class SymbolSelector extends FragmentModel {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -30,6 +28,8 @@ public class SymbolSelector extends Fragment {
     private Integer selectedIndex;
 
     private Spinner spinner;
+
+    private AdapterView.OnItemSelectedListener selectedListener;
 
     public SymbolSelector() {
         // Required empty public constructor
@@ -52,7 +52,7 @@ public class SymbolSelector extends Fragment {
     }
 
     protected ArrayList<String> getDataSource() {
-        return Symbols.getSupportedArray();
+        return model.getSymbols().mapCodeAndCountry();
     }
 
     protected ArrayAdapter<String> getAdapter() {
@@ -65,8 +65,13 @@ public class SymbolSelector extends Fragment {
     }
 
     public void setOnSelected(AdapterView.OnItemSelectedListener onSelected){
+        this.selectedListener = onSelected;
+        this.applyOnSelected();
+    }
+
+    private void applyOnSelected(){
         if(spinner != null){
-            spinner.setOnItemSelectedListener(onSelected);
+            spinner.setOnItemSelectedListener(this.selectedListener);
         }
     }
 
@@ -77,6 +82,7 @@ public class SymbolSelector extends Fragment {
         if (getArguments() != null) {
             selectedIndex = getArguments().getInt(ARG_SELECTED);
         }
+        loadModel();
     }
 
     @Override
@@ -89,6 +95,8 @@ public class SymbolSelector extends Fragment {
 
         // Apply the adapter to the spinner
         spinner.setAdapter(getAdapter());
+
+        applyOnSelected();
 
         // Set selected index
         if(selectedIndex != null){

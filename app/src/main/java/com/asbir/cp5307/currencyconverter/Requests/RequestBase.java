@@ -87,8 +87,7 @@ public abstract class RequestBase {
 
     public void build(Response.Listener<JSONObject> listener,
                      @Nullable Response.ErrorListener errorListener) {
-        Log.i("curconv", fullUrl());
-        Log.i("curconv", String.valueOf(getMethod()));
+        Log.i("conv", fullUrl());
 
         request = new JsonObjectRequest(getMethod(), fullUrl(), jsonPayload(), listener, errorListener){
 //            @Override

@@ -29,6 +29,9 @@ public class CurrencyPair {
         this.lastUpdate = lastUpdate;
     }
 
+    public CurrencyPair(){
+    }
+
     public String getBase() {
         return base;
     }
@@ -44,4 +47,26 @@ public class CurrencyPair {
     public Integer getLastUpdate() {
         return lastUpdate;
     }
+
+    public void setBase(@NonNull String base) {
+        this.base = base;
+    }
+
+    public void setPair(@NonNull String pair) {
+        this.pair = pair;
+    }
+
+    public void setRate(Double rate) {
+        this.rate = rate;
+    }
+
+    public void setLastUpdate(Integer lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
+    public Double convert(Double value){
+        return value * rate;
+    }
+
+
 }

@@ -54,4 +54,8 @@ public class LatestRatesRequest extends RequestBase {
         qsMap.put("symbols", String.join(",", getSymbols()));
         return qsMap;
     }
+
+    public void setTag(String tag) {
+        request.setTag(tag);
+    }
 }
