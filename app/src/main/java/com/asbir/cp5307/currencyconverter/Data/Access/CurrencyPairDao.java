@@ -24,6 +24,9 @@ public interface CurrencyPairDao {
     @Delete
     public Completable delete(CurrencyPair currencyPair);
 
+    @Query("DELETE FROM currency_pair")
+    public Completable deleteAll();
+
     @Update
     public Completable update(CurrencyPair... currencyPairs);
 

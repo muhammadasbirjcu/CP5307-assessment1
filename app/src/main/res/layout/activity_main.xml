@@ -7,11 +7,7 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-<!--    <TextView-->
-<!--        android:id="@+id/txtBaseCode"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="USD"/>-->
+
     <androidx.fragment.app.FragmentContainerView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/fcvSymbolBase"
@@ -27,11 +23,6 @@
         android:hint="0.00"
         android:inputType="number" />
 
-<!--    <TextView-->
-<!--        android:id="@+id/txtPairCode"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="AUD"/>-->
 
     <androidx.fragment.app.FragmentContainerView
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -105,5 +96,10 @@
         android:layout_height="wrap_content"
         android:text="Refresh Rate"
         android:onClick="refreshExchangeRate"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Settings"
+        android:onClick="onSettingsClicked"/>
 
 </LinearLayout>

@@ -3,6 +3,7 @@ package com.asbir.cp5307.currencyconverter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.AttributeSet;
@@ -26,6 +27,7 @@ import com.android.volley.toolbox.Volley;
 import com.asbir.cp5307.currencyconverter.Data.Database.CurrencyConverterDatabase;
 import com.asbir.cp5307.currencyconverter.Data.Entities.CurrencyPair;
 import com.asbir.cp5307.currencyconverter.Requests.LatestRatesRequest;
+import com.asbir.cp5307.currencyconverter.Requests.RequestBase;
 import com.asbir.cp5307.currencyconverter.Responses.LatestRatesResponse;
 import com.asbir.cp5307.currencyconverter.Services.AppSharedPreference;
 import com.asbir.cp5307.currencyconverter.Services.FormatHelper;
@@ -50,7 +52,6 @@ public class MainActivity extends ActivityModel {
     SymbolSelector selectorPair;
     RequestQueue queue;
     AppSharedPreference sharedPref;
-    String apiKey = "c1c9034e579a8d045cb991d6c16464a4";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +64,7 @@ public class MainActivity extends ActivityModel {
 
         // shared preference
         sharedPref = new AppSharedPreference(this, getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        sharedPref.init();
 
         // volley queue
         queue = Volley.newRequestQueue(this);
@@ -214,7 +216,7 @@ public class MainActivity extends ActivityModel {
 
         // start building new request
         LatestRatesRequest rates = new LatestRatesRequest(base, new String[]{converted});
-        rates.setApiKey(sharedPref.retrieveApiKey(apiKey));
+        rates.setApiKey(sharedPref.retrieveApiKey(RequestBase.apiKey()));
         rates.build(new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -281,6 +283,11 @@ public class MainActivity extends ActivityModel {
 
     public void refreshExchangeRate(View view){
         retrieveRate(model.getSymbolBase().getValue().getCode(), model.getSymbolConverted().getValue().getCode());
+    }
+
+    public void onSettingsClicked(View view){
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
     }
 
     public void toggleRefreshing(boolean loading){

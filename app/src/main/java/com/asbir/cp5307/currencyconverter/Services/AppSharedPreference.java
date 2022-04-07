@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.asbir.cp5307.currencyconverter.R;
+import com.asbir.cp5307.currencyconverter.Requests.RequestBase;
 
 public class AppSharedPreference {
 
@@ -13,7 +14,13 @@ public class AppSharedPreference {
     public AppSharedPreference(Context context, String name, int mode){
         sharedPref = context.getSharedPreferences(name, mode);
         editor = sharedPref.edit();
+    }
 
+    public void init(){
+        if(retrieveApiKey(null) == null){
+            saveApiKey(RequestBase.apiKey());
+            apply();
+        }
     }
 
     public void saveBaseCurrency(String code) {
