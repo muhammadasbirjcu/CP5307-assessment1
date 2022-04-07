@@ -7,99 +7,174 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-
-    <androidx.fragment.app.FragmentContainerView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/fcvSymbolBase"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <EditText
-        android:id="@+id/txtBaseValue"
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/indicator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:ems="10"
-        android:hint="0.00"
-        android:inputType="number" />
+        android:visibility="gone"
+        android:indeterminate="true" />
 
-
-    <androidx.fragment.app.FragmentContainerView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/fcvSymbolPair"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <EditText
-        android:id="@+id/txtPairValue"
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:ems="10"
-        android:hint="0.00"
-        android:enabled="false"
-        android:inputType="numberDecimal" />
+        android:layout_margin="15dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingRight="15dp"
+                android:paddingLeft="15dp"
+                android:paddingTop="15dp"
+                android:layout_marginBottom="15dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Rate : "/>
-        <TextView
-            android:id="@+id/txtBaseRate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1.00"/>
-        <TextView
-            android:id="@+id/txtBaseRateCode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="USD"/>
+                <androidx.fragment.app.FragmentContainerView
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/fcvSymbolBase"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=" = "/>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/txtPairRate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2.50"/>
-        <TextView
-            android:id="@+id/txtPairRateCode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="AUD"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/txtBaseValue"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:text="0.00"
+                        android:textAlignment="viewEnd"
+                        android:inputType="numberDecimal"
+                        />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Last updated: "/>
-        <TextView
-            android:id="@+id/txtLastUpdateTs"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2 secs ago"/>
-    </LinearLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
-        android:id="@+id/btnRefresh"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Refresh Rate"
-        android:onClick="refreshExchangeRate"/>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Settings"
-        android:onClick="onSettingsClicked"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingRight="15dp"
+                android:paddingLeft="15dp"
+                android:layout_marginBottom="15dp">
+
+                <androidx.fragment.app.FragmentContainerView
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/fcvSymbolPair"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/txtPairValue"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="26dp"
+                        android:textAlignment="viewEnd"
+                        android:enabled="false"
+                        android:inputType="numberDecimal"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <!-- Exchange Rate Info-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/purple_500"
+                android:padding="15dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Rate : "/>
+                        <TextView
+                            android:id="@+id/txtBaseRate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:text="1.00"
+                            android:layout_marginRight="5dp"/>
+                        <TextView
+                            android:id="@+id/txtBaseRateCode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:text="USD"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=" = "/>
+
+                        <TextView
+                            android:id="@+id/txtPairRate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="5dp"
+                            android:textColor="@color/white"
+                            android:text="2.50"/>
+                        <TextView
+                            android:id="@+id/txtPairRateCode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:text="AUD"/>
+                    </LinearLayout>
+                    <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Last updated: "/>
+                    <TextView
+                        android:id="@+id/txtLastUpdateTs"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:text="2 secs ago"/>
+                </LinearLayout>
+                </LinearLayout>
+                <Button
+                    android:id="@+id/btnRefresh"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    app:iconTint="@color/purple_500"
+                    android:textColor="@color/purple_500"
+                    style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+                    app:icon="@drawable/outline_autorenew_24"
+                    android:onClick="refreshExchangeRate"/>
+
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+
+
 
 </LinearLayout>

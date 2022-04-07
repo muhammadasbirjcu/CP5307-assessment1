@@ -9,7 +9,10 @@ import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,6 +34,7 @@ import com.asbir.cp5307.currencyconverter.Requests.RequestBase;
 import com.asbir.cp5307.currencyconverter.Responses.LatestRatesResponse;
 import com.asbir.cp5307.currencyconverter.Services.AppSharedPreference;
 import com.asbir.cp5307.currencyconverter.Services.FormatHelper;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -131,6 +135,39 @@ public class MainActivity extends ActivityModel {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        focusOnBaseValue();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        focusOnBaseValue();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.settings:
+                Intent settingsIntent = new Intent(this, SettingsActivity.class);
+                startActivity(settingsIntent);
+                return true;
+            case R.id.about:
+                Intent aboutIntent = new Intent(this, AboutActivity.class);
+                startActivity(aboutIntent);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     protected SymbolSelector buildSymbolSelectors(Integer frameContainerResource, String selectedCode) {
         Integer selectedIndex = model.getSymbols().getIndexOf(selectedCode);
@@ -187,7 +224,7 @@ public class MainActivity extends ActivityModel {
     }
 
     protected void promptAlert(String title, String message){
-        new AlertDialog.Builder(this)
+        new MaterialAlertDialogBuilder(this)
                 .setTitle(title)
                 .setMessage(message)
 
@@ -213,6 +250,7 @@ public class MainActivity extends ActivityModel {
         queue.cancelAll(requestTag);
 
         toggleRefreshing(true);
+        toggleLoadingIndicator(true);
 
         // start building new request
         LatestRatesRequest rates = new LatestRatesRequest(base, new String[]{converted});
@@ -221,6 +259,7 @@ public class MainActivity extends ActivityModel {
             @Override
             public void onResponse(JSONObject response) {
                 toggleRefreshing(false);
+                toggleLoadingIndicator(false);
                 LatestRatesResponse resp = new LatestRatesResponse();
                 try{
                     resp.parse(response);
@@ -235,6 +274,7 @@ public class MainActivity extends ActivityModel {
             @Override
             public void onErrorResponse(VolleyError error) {
                 toggleRefreshing(false);
+                toggleLoadingIndicator(false);
                 promptAlert("API Error", "Unable to retrieve the latest rate for " + base + " x " + converted);
                 Log.i("conv", "api error", error);
             }
@@ -285,19 +325,22 @@ public class MainActivity extends ActivityModel {
         retrieveRate(model.getSymbolBase().getValue().getCode(), model.getSymbolConverted().getValue().getCode());
     }
 
-    public void onSettingsClicked(View view){
-        Intent intent = new Intent(this, SettingsActivity.class);
-        startActivity(intent);
-    }
-
     public void toggleRefreshing(boolean loading){
         Button refreshButton = findViewById(R.id.btnRefresh);
         if(loading){
-            refreshButton.setText("Refreshing..");
             refreshButton.setEnabled(false);
         }else{
-            refreshButton.setText("Refresh");
             refreshButton.setEnabled(true);
         }
+    }
+
+    protected void focusOnBaseValue(){
+        findViewById(R.id.txtBaseValue).requestFocus();
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(findViewById(R.id.txtBaseValue), InputMethodManager.SHOW_IMPLICIT);
+    }
+
+    protected void toggleLoadingIndicator(boolean visible){
+        findViewById(R.id.indicator).setVisibility(visible? View.VISIBLE : View.GONE);
     }
 }

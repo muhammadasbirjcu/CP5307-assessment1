@@ -57,9 +57,11 @@ public class SymbolSelector extends FragmentModel {
 
     protected ArrayAdapter<String> getAdapter() {
         // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, getDataSource());
+        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, getDataSource());
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), R.layout.symbol_item, getDataSource());
         // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.symbols_dropdown);
 
         return adapter;
     }

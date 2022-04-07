@@ -1,6 +1,22 @@
 <resources>
     <string name="app_name">Currency Converter</string>
-    <string name="about">currency_converter</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="about">About</string>
+    <string name="api_key">API Key</string>
+    <string name="api_key_info">This app utilises the API from exchangeratesapi.io. The creator of this app has set a default API key which is connected to his paid subscription.</string>
+    <string name="settings">Settings</string>
     <string name="preference_file_key">currency_converter</string>
+    <string name="about_title">About</string>
+    <string name="credits_title">Credits</string>
+    <string name="about_content">
+        This app was developed for CP5307 Advanced Mobile Technology of James Cook University Brisbane.\n\n
+        This app is dedicated to Ritchelle and Ethan whom without them would have been done 1 week earlier. ¯\\_(ツ)_/¯
+
+    </string>
+    <string name="credits_content">
+        Material Design - https://material.io/\n
+        Google Fonts and Icons - https://fonts.google.com/\n
+        Android Volley - https://google.github.io/volley/\n
+        RX Java - https://github.com/ReactiveX/RxJava
+    </string>
+    <string name="copyright">Muhammad Asbir | JCU Brisbane | 2022</string>
 </resources>

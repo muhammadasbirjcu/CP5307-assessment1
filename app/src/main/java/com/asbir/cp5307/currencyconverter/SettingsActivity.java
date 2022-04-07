@@ -12,6 +12,7 @@ import android.widget.EditText;
 
 import com.asbir.cp5307.currencyconverter.Data.Database.CurrencyConverterDatabase;
 import com.asbir.cp5307.currencyconverter.Services.AppSharedPreference;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -19,16 +20,14 @@ import io.reactivex.schedulers.Schedulers;
 public class SettingsActivity extends ActivityModel {
 
     AppSharedPreference sharedPref;
-    CurrencyConverterDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        // database
-        db = Room.databaseBuilder(getApplicationContext(),
-                CurrencyConverterDatabase.class, "curconverter").build();
+        getSupportActionBar().setTitle("Settings");
+
 
         // shared preference
         sharedPref = new AppSharedPreference(this, getString(R.string.preference_file_key), Context.MODE_PRIVATE);
@@ -36,6 +35,7 @@ public class SettingsActivity extends ActivityModel {
 
         initData();
     }
+
 
     protected void initData(){
         ((EditText)findViewById(R.id.txtApiKey)).setText(sharedPref.retrieveApiKey(""));
@@ -46,7 +46,7 @@ public class SettingsActivity extends ActivityModel {
         sharedPref.apply();
 
 
-        new AlertDialog.Builder(this)
+        new MaterialAlertDialogBuilder(this)
                 .setTitle("Saved")
                 .setMessage("Settings saved")
 
@@ -64,26 +64,26 @@ public class SettingsActivity extends ActivityModel {
     }
 
     public void onClearDataClicked(View view){
-        db.currencyPairDao().deleteAll()
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> {
-
-                    new AlertDialog.Builder(this)
-                            .setTitle("Cleared")
-                            .setMessage("All stored exchange rate were cleared")
-
-                            // Specifying a listener allows you to take an action before dismissing the dialog.
-                            // The dialog is automatically dismissed when a dialog button is clicked.
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // Continue with delete operation
-                                }
-                            })
-                            // A null listener allows the button to dismiss the dialog and take no further action.
-                            //.setNegativeButton(android.R.string.no, null)
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();
-                });
+//        db.currencyPairDao().deleteAll()
+//                .subscribeOn(Schedulers.computation())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(() -> {
+//
+//                    new AlertDialog.Builder(this)
+//                            .setTitle("Cleared")
+//                            .setMessage("All stored exchange rate were cleared")
+//
+//                            // Specifying a listener allows you to take an action before dismissing the dialog.
+//                            // The dialog is automatically dismissed when a dialog button is clicked.
+//                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    // Continue with delete operation
+//                                }
+//                            })
+//                            // A null listener allows the button to dismiss the dialog and take no further action.
+//                            //.setNegativeButton(android.R.string.no, null)
+//                            .setIcon(android.R.drawable.ic_dialog_alert)
+//                            .show();
+//                });
     }
 }
