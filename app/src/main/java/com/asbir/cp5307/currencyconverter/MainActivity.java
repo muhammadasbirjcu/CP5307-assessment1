@@ -3,12 +3,14 @@ package com.asbir.cp5307.currencyconverter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +27,7 @@ import com.asbir.cp5307.currencyconverter.Data.Database.CurrencyConverterDatabas
 import com.asbir.cp5307.currencyconverter.Data.Entities.CurrencyPair;
 import com.asbir.cp5307.currencyconverter.Requests.LatestRatesRequest;
 import com.asbir.cp5307.currencyconverter.Responses.LatestRatesResponse;
+import com.asbir.cp5307.currencyconverter.Services.AppSharedPreference;
 import com.asbir.cp5307.currencyconverter.Services.FormatHelper;
 
 import org.json.JSONException;
@@ -46,6 +49,8 @@ public class MainActivity extends ActivityModel {
     SymbolSelector selectorBase;
     SymbolSelector selectorPair;
     RequestQueue queue;
+    AppSharedPreference sharedPref;
+    String apiKey = "c1c9034e579a8d045cb991d6c16464a4";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +61,9 @@ public class MainActivity extends ActivityModel {
         db = Room.databaseBuilder(getApplicationContext(),
                 CurrencyConverterDatabase.class, "curconverter").build();
 
+        // shared preference
+        sharedPref = new AppSharedPreference(this, getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+
         // volley queue
         queue = Volley.newRequestQueue(this);
         queue.start();
@@ -63,14 +71,16 @@ public class MainActivity extends ActivityModel {
         // view models
         loadModel();
         model.loadSymbols();
-        model.selectBaseCode("USD");
-        model.selectConvertedCode("AUD");
+        model.selectBaseCode(sharedPref.retrieveBaseCurrency("USD"));
+        model.selectConvertedCode(sharedPref.retrieveConvertedCurrency("AUD"));
         initInputs();
 
         // inflate fragments
         selectorBase = buildSymbolSelectors(R.id.fcvSymbolBase, model.getSymbolBase().getValue().getCode());
         selectorPair = buildSymbolSelectors(R.id.fcvSymbolPair, model.getSymbolConverted().getValue().getCode());
 
+
+        // components events
         selectorBase.setOnSelected(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -93,14 +103,19 @@ public class MainActivity extends ActivityModel {
             }
         });
 
+
         // set listeners
         model.getSymbolBase().observe(this, item -> {
             Log.i("conv", "Changed base: " + model.getSymbolBase().getValue().getCode());
+            sharedPref.saveBaseCurrency(model.getSymbolBase().getValue().getCode());
+            sharedPref.apply();
             applyPairUIChanges();
             loadFromDatabase(model.getSymbolBase().getValue().getCode(), model.getSymbolConverted().getValue().getCode());
         });
         model.getSymbolConverted().observe(this, item -> {
             Log.i("conv", "Changed converted: " + model.getSymbolConverted().getValue().getCode());
+            sharedPref.saveConvertedCurrency(model.getSymbolConverted().getValue().getCode());
+            sharedPref.apply();
             applyPairUIChanges();
             loadFromDatabase(model.getSymbolBase().getValue().getCode(), model.getSymbolConverted().getValue().getCode());
         });
@@ -195,11 +210,15 @@ public class MainActivity extends ActivityModel {
         // this cancels all existing requests
         queue.cancelAll(requestTag);
 
+        toggleRefreshing(true);
+
         // start building new request
         LatestRatesRequest rates = new LatestRatesRequest(base, new String[]{converted});
+        rates.setApiKey(sharedPref.retrieveApiKey(apiKey));
         rates.build(new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+                toggleRefreshing(false);
                 LatestRatesResponse resp = new LatestRatesResponse();
                 try{
                     resp.parse(response);
@@ -213,6 +232,7 @@ public class MainActivity extends ActivityModel {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                toggleRefreshing(false);
                 promptAlert("API Error", "Unable to retrieve the latest rate for " + base + " x " + converted);
                 Log.i("conv", "api error", error);
             }
@@ -257,8 +277,20 @@ public class MainActivity extends ActivityModel {
                 Log.i("conv", "insert error", error);
 
             });
+    }
 
+    public void refreshExchangeRate(View view){
+        retrieveRate(model.getSymbolBase().getValue().getCode(), model.getSymbolConverted().getValue().getCode());
+    }
 
-
+    public void toggleRefreshing(boolean loading){
+        Button refreshButton = findViewById(R.id.btnRefresh);
+        if(loading){
+            refreshButton.setText("Refreshing..");
+            refreshButton.setEnabled(false);
+        }else{
+            refreshButton.setText("Refresh");
+            refreshButton.setEnabled(true);
+        }
     }
 }

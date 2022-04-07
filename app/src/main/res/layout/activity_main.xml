@@ -99,4 +99,11 @@
             android:text="2 secs ago"/>
     </LinearLayout>
 
+    <Button
+        android:id="@+id/btnRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Refresh Rate"
+        android:onClick="refreshExchangeRate"/>
+
 </LinearLayout>

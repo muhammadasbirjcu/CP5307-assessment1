@@ -27,7 +27,7 @@ public interface CurrencyPairDao {
     @Update
     public Completable update(CurrencyPair... currencyPairs);
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     public Completable insert(CurrencyPair currencyPairs);
 
     @Query("SELECT * FROM currency_pair")

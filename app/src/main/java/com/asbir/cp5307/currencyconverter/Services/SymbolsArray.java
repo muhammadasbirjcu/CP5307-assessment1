@@ -13,6 +13,10 @@ public class SymbolsArray extends ArrayList<Symbol> {
         if(supported != null){
         }else{
             supported = new SymbolsArray();
+            supported.add( new Symbol("USD", "United States Dollar"));
+            supported.add( new Symbol("AUD", "Australian Dollar"));
+            supported.add( new Symbol("EUR", "Euro"));
+
             supported.add( new Symbol("AED", "United Arab Emirates Dirham"));
             supported.add( new Symbol("AFN", "Afghan Afghani"));
             supported.add( new Symbol("ALL", "Albanian Lek"));
@@ -20,7 +24,6 @@ public class SymbolsArray extends ArrayList<Symbol> {
             supported.add( new Symbol("ANG", "Netherlands Antillean Guilder"));
             supported.add( new Symbol("AOA", "Angolan Kwanza"));
             supported.add( new Symbol("ARS", "Argentine Peso"));
-            supported.add( new Symbol("AUD", "Australian Dollar"));
             supported.add( new Symbol("AWG", "Aruban Florin"));
             supported.add( new Symbol("AZN", "Azerbaijani Manat"));
             supported.add( new Symbol("BAM", "Bosnia-Herzegovina Convertible Mark"));
@@ -59,7 +62,6 @@ public class SymbolsArray extends ArrayList<Symbol> {
             supported.add( new Symbol("EGP", "Egyptian Pound"));
             supported.add( new Symbol("ERN", "Eritrean Nakfa"));
             supported.add( new Symbol("ETB", "Ethiopian Birr"));
-            supported.add( new Symbol("EUR", "Euro"));
             supported.add( new Symbol("FJD", "Fijian Dollar"));
             supported.add( new Symbol("FKP", "Falkland Islands Pound"));
             supported.add( new Symbol("GBP", "British Pound Sterling"));
@@ -162,7 +164,6 @@ public class SymbolsArray extends ArrayList<Symbol> {
             supported.add( new Symbol("TZS", "Tanzanian Shilling"));
             supported.add( new Symbol("UAH", "Ukrainian Hryvnia"));
             supported.add( new Symbol("UGX", "Ugandan Shilling"));
-            supported.add( new Symbol("USD", "United States Dollar"));
             supported.add( new Symbol("UYU", "Uruguayan Peso"));
             supported.add( new Symbol("UZS", "Uzbekistan Som"));
             supported.add( new Symbol("VEF", "Venezuelan Bolívar Fuerte"));

@@ -24,8 +24,11 @@ public abstract class RequestBase {
 
     RequestBase(){
         baseUrl = "https://api.exchangeratesapi.io/v1/";
-        apiKey = "c1c9034e579a8d045cb991d6c16464a4";
 
+    }
+
+    public void setApiKey(String apiKey){
+        this.apiKey = apiKey;
     }
 
     public JsonObjectRequest getRequest(){
